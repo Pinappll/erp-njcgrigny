@@ -82,3 +82,42 @@ Authorization: Bearer {{token}}
 ### Dashboard
 GET {{baseUrl}}/api/dashboard
 Authorization: Bearer {{token}}
+
+### Créer un événement
+POST {{baseUrl}}/api/evenements
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "titre": "Culte du dimanche",
+  "description": "Culte hebdomadaire",
+  "dateDebut": "2026-04-27 10:00",
+  "dateFin": "2026-04-27 12:00",
+  "lieu": "NJC Grigny",
+  "type": "culte"
+}
+
+### Prochains événements
+GET {{baseUrl}}/api/evenements/upcoming
+Authorization: Bearer {{token}}
+
+### Créer un matériel
+POST {{baseUrl}}/api/inventaire
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nom": "Sono principale",
+  "description": "Système son principal de la salle",
+  "categorie": "sono",
+  "etat": "bon",
+  "quantite": 1,
+  "localisation": "Salle principale",
+  "dateAchat": "2023-06-15",
+  "valeurAchat": 1200.00,
+  "notes": "Révision annuelle prévue"
+}
+
+### Alertes matériels
+GET {{baseUrl}}/api/inventaire/alertes
+Authorization: Bearer {{token}}

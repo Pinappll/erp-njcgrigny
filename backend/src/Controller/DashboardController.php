@@ -10,6 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Repository\EvenementRepository;
+use App\Repository\MaterielRepository;
+
+
 
 #[Route('/api/dashboard')]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -19,6 +23,8 @@ class DashboardController extends AbstractController
         private MembreRepository $membreRepo,
         private TransactionRepository $transactionRepo,
         private ActionLogRepository $logRepo,
+        private EvenementRepository $evenementRepo,
+        private MaterielRepository $materielRepo,
         private EntityManagerInterface $em
     ) {}
 
@@ -88,6 +94,28 @@ class DashboardController extends AbstractController
             'createdAt'   => $l->getCreatedAt()->format('Y-m-d H:i:s'),
         ], $logsRecents);
 
+        $prochains = $this->evenementRepo->createQueryBuilder('e')
+            ->andWhere('e.dateDebut >= :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('e.dateDebut', 'ASC')
+            ->setMaxResults(3)
+            ->getQuery()->getResult();
+        $evenements = array_map(fn($e) => [
+            'id'        => $e->getId(),
+            'titre'     => $e->getTitre(),
+            'dateDebut' => $e->getDateDebut()->format('Y-m-d H:i'),
+            'lieu'      => $e->getLieu(),
+            'type'      => $e->getType(),
+        ], $prochains);
+
+        // --- INVENTAIRE ALERTES ---
+        $alertes = $this->materielRepo->createQueryBuilder('m')
+            ->andWhere('m.etat IN (:etats)')
+            ->setParameter('etats', ['mauvais', 'hors_service'])
+            ->getQuery()->getResult();
+
+        $totalMateriels = $this->materielRepo->count([]);
+
         return $this->json([
             'membres' => [
                 'total'     => $totalMembres,
@@ -111,6 +139,17 @@ class DashboardController extends AbstractController
                 'mois' => $mois,
                 'annee' => $annee,
             ],
+            'prochains_evenements' => $evenements,
+            'inventaire' => [
+            'total'         => $totalMateriels,
+            'alertes'       => count($alertes),
+            'liste_alertes' => array_map(fn($m) => [
+                'id'   => $m->getId(),
+                'nom'  => $m->getNom(),
+                'etat' => $m->getEtat(),
+            ], $alertes),
+        ],
+
         ]);
     }
 }
