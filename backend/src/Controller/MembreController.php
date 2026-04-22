@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Service\ActionLoggerService;
+
 
 #[Route('/api/membres')]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -17,7 +19,8 @@ class MembreController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private MembreRepository $membreRepository
+        private MembreRepository $membreRepository,
+        private ActionLoggerService $logger
     ) {}
 
     #[Route('', methods: ['GET'])]
@@ -66,6 +69,13 @@ class MembreController extends AbstractController
         $this->hydrate($membre, $data);
         $this->em->persist($membre);
         $this->em->flush();
+
+        $this->logger->log('CREATE', 'Membre', $membre->getId(), [
+            'nom'    => $membre->getNom(),
+            'prenom' => $membre->getPrenom(),
+            'statut' => $membre->getStatut(),
+        ], $this->getUser());
+
         return $this->json($this->serialize($membre), 201);
     }
 
@@ -75,6 +85,13 @@ class MembreController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $this->hydrate($membre, $data);
         $this->em->flush();
+
+        $this->logger->log('UPDATE', 'Membre', $membre->getId(), [
+            'nom'    => $membre->getNom(),
+            'prenom' => $membre->getPrenom(),
+            'statut' => $membre->getStatut(),
+        ], $this->getUser());
+
         return $this->json($this->serialize($membre));
     }
 
@@ -82,6 +99,11 @@ class MembreController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function delete(Membre $membre): JsonResponse
     {
+        $this->logger->log('DELETE', 'Membre', $membre->getId(), [
+            'nom'    => $membre->getNom(),
+            'prenom' => $membre->getPrenom(),
+        ], $this->getUser());
+
         $this->em->remove($membre);
         $this->em->flush();
         return $this->json(['message' => 'Membre supprimé']);

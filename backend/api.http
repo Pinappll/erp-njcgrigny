@@ -1,0 +1,84 @@
+### Variables
+@baseUrl = http://localhost:8080
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NzY4NTc2MTQsImV4cCI6MTc3Njg2MTIxNCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQG5qY2dyaWdueS5mciJ9.K4hp4wcVOaUuriWCp6MuxL8jCBBtM1eJaGTk1RzlatukUbFeCSSzotrsUWwoGKNK7aUcAmzYkPLNBghfJ8WL4AUxKsIXp3yYG9Q2BZwbKOo9UnlFieT1g-W6lhebVkCVDTmYgbfjpR-bBR2glEDHuZNgJTWObBFaPW70FaWtvIMdn9io6jrVs41OeuCrfpwzygADw7fF4XKwAlqlLqn5uomxBZJUONljj710eVVqYeADTF_6HfD6bDsSfQzbgRUmR2G0Q6mf3hSQljbcr8QmiYqMloQYqZrEQEa9me-M58jwKBYV9ybIqIDIyzHgIRd7-nLQVjsRqOGi8qWYe7IBipiSiuqUUT7SdjYlSGy4OoShT5chX8w8UOSYYVNLEmEGU3STsttJ6NjN0jtgIBFiFde3z2q_0G3vYunMkT-vW0E9YmFQF5jLAaJGEacDJsJpEp0Gl2iSp3veb5f5CwdFqzWPpoZs_loAayVMB0WBDgapeWdOkPgDH6dvCB3vopakKuf6VK2sV64wBYE9YG7KMp08ybnub32wxuApO7rXQua68vwloGjxtNLl-YMyxJWZJiZ7mWGpx4ZqYibLRxCTiRC34GJQgKzBnC2nyNsEqi9GTe3ybH-xGBAYBKsDL6GvgppadTNC916KkRLWyz_5U2NWgtjcgHitik8tXjq7waY
+
+### Auth - Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@njcgrigny.fr",
+  "password": "Admin1234!"
+}
+
+### Catégories - Liste
+GET {{baseUrl}}/api/categories
+Authorization: Bearer {{token}}
+
+### Catégories - Entrées seulement
+GET {{baseUrl}}/api/categories?type=entree
+Authorization: Bearer {{token}}
+
+### Transactions - Créer une dîme
+POST {{baseUrl}}/api/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "date": "2026-01-05",
+  "type": "entree",
+  "categorieId": 1,
+  "montant": 250,
+  "modePaiement": "banque",
+  "description": "Dîme Frère Dupont Jan 2026"
+}
+
+### Transactions - Créer un loyer
+POST {{baseUrl}}/api/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "date": "2026-01-10",
+  "type": "sortie",
+  "categorieId": 6,
+  "montant": 500,
+  "modePaiement": "banque",
+  "description": "Loyer Janvier 2026"
+}
+
+### Transactions - Liste avec soldes
+GET {{baseUrl}}/api/transactions?annee=2026
+Authorization: Bearer {{token}}
+
+### Transactions - Filtrer par mois
+GET {{baseUrl}}/api/transactions?annee=2026&mois=1
+Authorization: Bearer {{token}}
+
+### Rapport mensuel
+GET {{baseUrl}}/api/rapport?annee=2026
+Authorization: Bearer {{token}}
+
+### Membres - Liste
+GET {{baseUrl}}/api/membres
+Authorization: Bearer {{token}}
+
+### Utilisateurs - Liste (admin only)
+GET {{baseUrl}}/api/users
+Authorization: Bearer {{token}}
+
+### Tous les logs
+GET {{baseUrl}}/api/logs
+Authorization: Bearer {{token}}
+
+### Logs des transactions seulement
+GET {{baseUrl}}/api/logs?module=Transaction
+Authorization: Bearer {{token}}
+
+### Logs de création seulement
+GET {{baseUrl}}/api/logs?action=CREATE
+Authorization: Bearer {{token}}
+
+### Dashboard
+GET {{baseUrl}}/api/dashboard
+Authorization: Bearer {{token}}

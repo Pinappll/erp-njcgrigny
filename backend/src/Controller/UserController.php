@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Service\ActionLoggerService;
+
 
 #[Route('/api/users')]
 #[IsGranted('ROLE_ADMIN')]
@@ -19,7 +21,8 @@ class UserController extends AbstractController
     public function __construct(
         private EntityManagerInterface $em,
         private UserPasswordHasherInterface $hasher,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
+    private ActionLoggerService $logger
     ) {}
 
     // Liste tous les utilisateurs
@@ -43,7 +46,6 @@ class UserController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
         $user = new User();
         $user->setEmail($data['email']);
         $user->setNom($data['nom']);
@@ -51,52 +53,63 @@ class UserController extends AbstractController
         $user->setRoles([$data['role'] ?? 'ROLE_USER']);
         $user->setActif($data['actif'] ?? true);
         $user->setDateCreation(new \DateTime());
-        $user->setPassword(
-            $this->hasher->hashPassword($user, $data['password'])
-        );
-
+        $user->setPassword($this->hasher->hashPassword($user, $data['password']));
         $this->em->persist($user);
         $this->em->flush();
+
+        $this->logger->log('CREATE', 'User', $user->getId(), [
+            'email' => $user->getEmail(),
+            'roles' => $user->getRoles(),
+        ], $this->getUser());
 
         return $this->json($this->serialize($user), 201);
     }
 
-    // Modifier un utilisateur
     #[Route('/{id}', methods: ['PUT'])]
     public function update(User $user, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
         if (isset($data['email'])) $user->setEmail($data['email']);
         if (isset($data['nom'])) $user->setNom($data['nom']);
         if (isset($data['prenom'])) $user->setPrenom($data['prenom']);
         if (isset($data['role'])) $user->setRoles([$data['role']]);
         if (isset($data['actif'])) $user->setActif($data['actif']);
         if (isset($data['password'])) {
-            $user->setPassword(
-                $this->hasher->hashPassword($user, $data['password'])
-            );
+            $user->setPassword($this->hasher->hashPassword($user, $data['password']));
         }
-
         $this->em->flush();
+
+        $this->logger->log('UPDATE', 'User', $user->getId(), [
+            'email' => $user->getEmail(),
+            'roles' => $user->getRoles(),
+        ], $this->getUser());
+
         return $this->json($this->serialize($user));
     }
 
-    // Supprimer un utilisateur
     #[Route('/{id}', methods: ['DELETE'])]
     public function delete(User $user): JsonResponse
     {
+        $this->logger->log('DELETE', 'User', $user->getId(), [
+            'email' => $user->getEmail(),
+        ], $this->getUser());
+
         $this->em->remove($user);
         $this->em->flush();
         return $this->json(['message' => 'Utilisateur supprimé']);
     }
 
-    // Activer/désactiver
     #[Route('/{id}/toggle', methods: ['PATCH'])]
     public function toggle(User $user): JsonResponse
     {
         $user->setActif(!$user->isActif());
         $this->em->flush();
+
+        $this->logger->log('UPDATE', 'User', $user->getId(), [
+            'email' => $user->getEmail(),
+            'actif' => $user->isActif(),
+        ], $this->getUser());
+
         return $this->json($this->serialize($user));
     }
 
