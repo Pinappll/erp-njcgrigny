@@ -69,7 +69,7 @@ export default function Dashboard() {
   if (isLoading)
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-[#a81c18] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-njc-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
 
@@ -97,8 +97,8 @@ export default function Dashboard() {
       sub: `${membres.total} au total`,
       icon: Users,
       trend: true,
-      color: "text-[#a81c18]",
-      bg: "bg-[#a81c18]/10",
+      color: "text-njc-primary",
+      bg: "bg-njc-primary/10",
     },
     {
       title: "Solde global",
@@ -116,7 +116,7 @@ export default function Dashboard() {
       icon: TrendingDown,
       trend: true,
       color: "text-[#73b2e2]",
-      bg: "bg-[#73b2e2]/10",
+      bg: "bg-njc-blue/10",
     },
     {
       title: "Transactions",
@@ -146,7 +146,7 @@ export default function Dashboard() {
 
       {/* Stats cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        {stats.map(({ title, value, sub, icon: Icon, trend, color, bg }) => (
+        {stats.map(({ title, value, sub, trend, color, bg }) => (
           <Card key={title}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-500">
@@ -159,7 +159,7 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-[#1b1f28]">{value}</div>
+              <div className="text-2xl font-bold text-njc-dark">{value}</div>
               <div className="flex items-center gap-1 mt-1">
                 {trend ? (
                   <ArrowUpRight size={13} className="text-green-500" />
@@ -236,11 +236,11 @@ export default function Dashboard() {
             </ResponsiveContainer>
             <div className="flex items-center gap-6 mt-3">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#a81c18]" />
+                <div className="w-3 h-3 rounded-full bg-njc-primary" />
                 <span className="text-xs text-gray-500">Entrées</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#73b2e2]" />
+                <div className="w-3 h-3 rounded-full bg-njc-blue" />
                 <span className="text-xs text-gray-500">Sorties</span>
               </div>
             </div>
@@ -255,12 +255,12 @@ export default function Dashboard() {
           <CardContent className="space-y-4">
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-xs text-gray-500 mb-1">Banque</p>
-              <p className="text-xl font-bold text-[#1b1f28]">
+              <p className="text-xl font-bold text-njc-dark">
                 {formatMoney(comptabilite.solde_banque)}
               </p>
               <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#a81c18] rounded-full transition-all"
+                  className="h-full bg-njc-primary rounded-full transition-all"
                   style={{
                     width: `${comptabilite.solde_global > 0 ? Math.min((comptabilite.solde_banque / comptabilite.solde_global) * 100, 100) : 0}%`,
                   }}
@@ -269,12 +269,12 @@ export default function Dashboard() {
             </div>
             <div className="p-4 bg-gray-50 rounded-lg">
               <p className="text-xs text-gray-500 mb-1">Espèces</p>
-              <p className="text-xl font-bold text-[#1b1f28]">
+              <p className="text-xl font-bold text-njc-dark">
                 {formatMoney(comptabilite.solde_especes)}
               </p>
               <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#73b2e2] rounded-full transition-all"
+                  className="h-full bg-njc-blue rounded-full transition-all"
                   style={{
                     width: `${comptabilite.solde_global > 0 ? Math.min((comptabilite.solde_especes / comptabilite.solde_global) * 100, 100) : 0}%`,
                   }}
@@ -284,7 +284,7 @@ export default function Dashboard() {
             <Separator />
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-gray-600">Total</span>
-              <span className="text-lg font-bold text-[#a81c18]">
+              <span className="text-lg font-bold text-njc-primary">
                 {formatMoney(comptabilite.solde_global)}
               </span>
             </div>
@@ -311,18 +311,18 @@ export default function Dashboard() {
               <div className="divide-y divide-gray-100">
                 {prochains_evenements.map((e) => (
                   <div key={e.id} className="py-3 flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-[#a81c18]/10 flex flex-col items-center justify-center shrink-0">
-                      <span className="text-[10px] text-[#a81c18] font-bold uppercase">
+                    <div className="w-10 h-10 rounded-lg bg-njc-primary/10 flex flex-col items-center justify-center shrink-0">
+                      <span className="text-[10px] text-njc-primary font-bold uppercase">
                         {new Date(e.dateDebut).toLocaleDateString("fr-FR", {
                           month: "short",
                         })}
                       </span>
-                      <span className="text-sm font-bold text-[#a81c18]">
+                      <span className="text-sm font-bold text-njc-primary">
                         {new Date(e.dateDebut).getDate()}
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-[#1b1f28] truncate">
+                      <p className="text-sm font-medium text-njc-dark truncate">
                         {e.titre}
                       </p>
                       <p className="text-xs text-gray-400">
@@ -363,7 +363,7 @@ export default function Dashboard() {
                     {log.action}
                   </Badge>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-[#1b1f28] truncate">
+                    <p className="text-sm text-njc-dark truncate">
                       {log.module}{" "}
                       <span className="text-gray-400">#{log.entiteId}</span>
                     </p>

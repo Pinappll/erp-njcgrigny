@@ -29,23 +29,23 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed top-0 left-0 h-screen w-64 bg-[#1b1f28] flex flex-col z-50">
+    <aside className="fixed top-0 left-0 h-screen w-64 bg-njc-dark flex flex-col z-50">
       {/* Logo */}
       <div className="px-6 py-6 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-[#a81c18] flex items-center justify-center">
+          <div className="w-9 h-9 rounded-lg bg-njc-primary flex items-center justify-center">
             <span className="text-white font-bold text-sm">N</span>
           </div>
           <div>
             <p className="text-white font-semibold text-sm">NJC Grigny</p>
-            <p className="text-[#e8c162] text-xs">Gestion interne</p>
+            <p className="text-njc-gold text-xs">Gestion interne</p>
           </div>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navItems.map(({ to, label, icon: Icon }) => (
+        {navItems.map(({ to, label }) => (
           <NavLink
             key={to}
             to={to}
@@ -53,7 +53,7 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors duration-150 ${
                 isActive
-                  ? "bg-[#a81c18] text-white font-medium"
+                  ? "bg-njc-primary text-white font-medium"
                   : "text-gray-400 hover:bg-white/10 hover:text-white"
               }`
             }

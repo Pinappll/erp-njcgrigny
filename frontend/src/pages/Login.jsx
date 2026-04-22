@@ -25,22 +25,22 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#1b1f28]">
+    <div className="min-h-screen flex items-center justify-center bg-njc-dark">
       <div className="w-full max-w-md">
         {/* Logo / Titre */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#a81c18] mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-njc-primary mb-4">
             <span className="text-white text-2xl font-bold">N</span>
           </div>
           <h1 className="text-white text-2xl font-bold">NJC Grigny</h1>
-          <p className="text-[#e8c162] text-sm mt-1">
+          <p className="text-njc-gold text-sm mt-1">
             Espace de gestion interne
           </p>
         </div>
 
         {/* Carte */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-[#1b1f28] text-xl font-semibold mb-6">
+          <h2 className="text-njc-dark text-xl font-semibold mb-6">
             Connexion
           </h2>
 
@@ -60,7 +60,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a81c18] focus:border-transparent text-sm"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-njc-primary focus:border-transparent text-sm"
                 placeholder="admin@njcgrigny.fr"
               />
             </div>
@@ -74,7 +74,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a81c18] focus:border-transparent text-sm"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-njc-primary focus:border-transparent text-sm"
                 placeholder="••••••••"
               />
             </div>
@@ -82,7 +82,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#a81c18] hover:bg-[#8e1614] text-white font-medium py-2.5 rounded-lg transition-colors duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-njc-primary hover:bg-[#8e1614] text-white font-medium py-2.5 rounded-lg transition-colors duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Connexion..." : "Se connecter"}
             </button>
